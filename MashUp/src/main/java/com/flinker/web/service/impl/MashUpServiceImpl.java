@@ -2,10 +2,11 @@ package com.flinker.web.service.impl;
 
 import com.google.gson.*;
 import com.flinker.bean.CommonResult;
-import com.flinker.bean.Url;
+import com.flinker.bean.Album;
 import com.flinker.consume.ConsumerThreadPool;
 import com.flinker.utils.UrlUtils;
 import com.flinker.web.service.MashUpService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +25,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @CreateTime: 2021/6/23
  * @company:
  */
+@Slf4j
 @Service
 public class MashUpServiceImpl implements MashUpService {
 
@@ -78,7 +80,7 @@ public class MashUpServiceImpl implements MashUpService {
         commonResult.setDescription(description);
 
         JsonArray releases = jsonObject.getAsJsonArray("release-groups");
-        List<Url> urls = Collections.synchronizedList(new ArrayList<>());
+        List<Album> albums = Collections.synchronizedList(new ArrayList<>());
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
         for (int i = 0; i < releases.size(); i++) {
             JsonObject object = releases.get(i).getAsJsonObject();
@@ -86,12 +88,12 @@ public class MashUpServiceImpl implements MashUpService {
             String id = object.get("id").getAsString();
             String title = object.get("title").getAsString();
             executor.execute(() -> {
-                Url url = new Url();
+                Album album = new Album();
                 String s = parseCover(id);
-                url.setImg(s == null?"not fond 404":s);
-                url.setId(id);
-                url.setTitle(title);
-                urls.add(url);
+                album.setImg(s == null?"not fond 404":s);
+                album.setId(id);
+                album.setTitle(title);
+                albums.add(album);
             });
         }
         executor.shutdown();
@@ -102,8 +104,8 @@ public class MashUpServiceImpl implements MashUpService {
                 e.printStackTrace();
             }
         }
-        System.out.println(urls.size());
-        commonResult.setAlbums(urls);
+        System.out.println(albums.size());
+        commonResult.setAlbums(albums);
         return new Gson().toJson(commonResult);
     }
 

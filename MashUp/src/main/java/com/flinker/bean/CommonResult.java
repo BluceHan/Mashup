@@ -6,12 +6,12 @@ import java.util.List;
 public class CommonResult {
     private String mbid;
     private String description;
-    private List<Url> albums;
+    private List<Album> albums;
 
     public CommonResult() {
     }
 
-    public CommonResult(String mbid, String description, List<Url> albums) {
+    public CommonResult(String mbid, String description, List<Album> albums) {
         this.mbid = mbid;
         this.description = description;
         this.albums = albums;
@@ -26,7 +26,7 @@ public class CommonResult {
         this.description = description;
     }
 
-    public void setAlbums(List<Url> albums) {
+    public void setAlbums(List<Album> albums) {
         this.albums = albums;
     }
 }
