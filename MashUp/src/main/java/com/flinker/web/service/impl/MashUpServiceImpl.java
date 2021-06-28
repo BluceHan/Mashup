@@ -102,14 +102,14 @@ public class MashUpServiceImpl implements MashUpService {
 
     /**
      * parse the content of Wikidata
-     * @param id ids
+     * @param identifier identifier like Q11649
      * @return title linking to WikiPedia
      */
-    private String parseWikidata(String id) {
-        String wikipediaUrl = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids="+id+"&format=json&props=sitelinks";
+    private String parseWikidata(String identifier) {
+        String wikipediaUrl = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids="+identifier+"&format=json&props=sitelinks";
         String doExchange = doConvert(wikipediaUrl);
         JsonObject jsonObject = new JsonParser().parse(doExchange).getAsJsonObject();
-        JsonObject entities = jsonObject.getAsJsonObject("entities").getAsJsonObject(id);
+        JsonObject entities = jsonObject.getAsJsonObject("entities").getAsJsonObject(identifier);
         JsonObject sitelinks = entities.getAsJsonObject("sitelinks");
         JsonObject enwiki = sitelinks.getAsJsonObject("enwiki");
         String title = enwiki.get("title").getAsString();
