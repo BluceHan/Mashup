@@ -11,16 +11,6 @@ import java.net.MalformedURLException;
  * @company:
  */
 public interface MashUpService {
-
-    /**
-     * an original method parsing the url of MusicBrainz
-     * @param address url
-     * @param param parameters
-     * @return json string
-     * @throws MalformedURLException
-     */
-    public String parseUrl(String address, String param) throws MalformedURLException;
-
     /**
      * a method parsing the url of MusicBrainz, and returing the final result of the api
      * @param url MusicBrainz的url

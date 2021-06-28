@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.flinker.bean.CommonResult;
 import com.flinker.bean.Album;
 import com.flinker.consume.ConsumerThreadPool;
-import com.flinker.utils.UrlUtils;
 import com.flinker.web.service.MashUpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -36,12 +35,6 @@ public class MashUpServiceImpl implements MashUpService {
     ExecutorService executorService = ConsumerThreadPool.getThreadPool();
 
     @Override
-    public String parseUrl(String address, String param) throws MalformedURLException {
-        URL url = new URL(address + "?" + param);
-        return UrlUtils.parseUrl(url);
-    }
-
-    @Override
     public String doConvert(String url) {
         //params of HttpHeaders
         HttpHeaders headers = new HttpHeaders();
@@ -57,12 +50,12 @@ public class MashUpServiceImpl implements MashUpService {
     }
 
     @Override
-    public String parseUrl(String mid) {
-        String musicUrl = "https://musicbrainz.org/ws/2/artist/"+mid+"?&fmt=json&inc=url-rels+release-groups";
+    public String parseUrl(String mbid) {
+        String musicUrl = "https://musicbrainz.org/ws/2/artist/"+mbid+"?&fmt=json&inc=url-rels+release-groups";
         String doExchange = doConvert(musicUrl);
         CommonResult commonResult = new CommonResult();
 
-        commonResult.setMbid(mid);
+        commonResult.setMbid(mbid);
         JsonObject jsonObject = new JsonParser().parse(doExchange).getAsJsonObject();
 
         JsonArray relations = jsonObject.getAsJsonArray("relations");
