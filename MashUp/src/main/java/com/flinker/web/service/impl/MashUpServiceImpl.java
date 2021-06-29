@@ -3,7 +3,6 @@ package com.flinker.web.service.impl;
 import com.google.gson.*;
 import com.flinker.bean.CommonResult;
 import com.flinker.bean.Album;
-import com.flinker.consume.ConsumerThreadPool;
 import com.flinker.web.service.MashUpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -28,9 +27,6 @@ public class MashUpServiceImpl implements MashUpService {
 
     @Resource
     private RestTemplate restTemplate;
-
-    private Map<String,String> synHashMap = Collections.synchronizedMap(new HashMap<String, String>());
-    ExecutorService executorService = ConsumerThreadPool.getThreadPool();
 
     @Override
     public String doConvert(String url) {
